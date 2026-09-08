@@ -1,0 +1,304 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://2key.local/billing/catalog.schema.json",
+	"type": "object",
+	"properties": {
+		"$schema": {
+			"type": "string"
+		},
+		"schemaVersion": {
+			"type": "number",
+			"const": 1
+		},
+		"billingEngineTag": {
+			"type": "string",
+			"minLength": 1
+		},
+		"surfaces": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"minLength": 1
+			}
+		},
+		"platforms": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"minLength": 1
+			}
+		},
+		"hosts": {
+			"type": "object",
+			"propertyNames": {
+				"type": "string",
+				"minLength": 1
+			},
+			"additionalProperties": {
+				"$ref": "#/$defs/host"
+			}
+		},
+		"products": {
+			"type": "object",
+			"propertyNames": {
+				"type": "string",
+				"minLength": 1
+			},
+			"additionalProperties": {
+				"$ref": "#/$defs/product"
+			}
+		}
+	},
+	"required": [
+		"schemaVersion",
+		"products"
+	],
+	"additionalProperties": false,
+	"title": "Merchant catalog.json",
+	"description": "Generated from src/validators/catalog-seed.validator.ts. Do not edit by hand.",
+	"$defs": {
+		"host": {
+			"type": "object",
+			"properties": {
+				"surfaces": {
+					"minItems": 1,
+					"type": "array",
+					"items": {
+						"type": "string",
+						"minLength": 1
+					}
+				},
+				"excludePlatforms": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"minLength": 1
+					}
+				}
+			},
+			"required": [
+				"surfaces"
+			],
+			"additionalProperties": false
+		},
+		"product": {
+			"type": "object",
+			"properties": {
+				"description": {
+					"type": "string"
+				},
+				"isActive": {
+					"type": "boolean"
+				},
+				"meters": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string",
+						"minLength": 1
+					},
+					"additionalProperties": {
+						"$ref": "#/$defs/meter"
+					}
+				},
+				"offerings": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string",
+						"minLength": 1
+					},
+					"additionalProperties": {
+						"$ref": "#/$defs/offering"
+					}
+				},
+				"plans": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string",
+						"minLength": 1
+					},
+					"additionalProperties": {
+						"$ref": "#/$defs/plan"
+					}
+				}
+			},
+			"required": [
+				"offerings",
+				"plans"
+			],
+			"additionalProperties": false
+		},
+		"meter": {
+			"type": "object",
+			"properties": {
+				"displayName": {
+					"type": "string",
+					"minLength": 1
+				},
+				"unit": {
+					"type": "string",
+					"minLength": 1
+				},
+				"aggregation": {
+					"type": "string",
+					"enum": [
+						"sum",
+						"max",
+						"last"
+					]
+				},
+				"description": {
+					"type": "string"
+				},
+				"metadata": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string"
+					},
+					"additionalProperties": {}
+				},
+				"isActive": {
+					"type": "boolean"
+				}
+			},
+			"required": [
+				"displayName",
+				"unit",
+				"aggregation"
+			],
+			"additionalProperties": false
+		},
+		"offering": {
+			"type": "object",
+			"properties": {
+				"displayName": {
+					"type": "string",
+					"minLength": 1
+				},
+				"isActive": {
+					"type": "boolean"
+				},
+				"resources": {
+					"$ref": "#/$defs/resources"
+				}
+			},
+			"required": [
+				"displayName",
+				"resources"
+			],
+			"additionalProperties": false
+		},
+		"resources": {
+			"type": "object",
+			"properties": {
+				"addonCode": {
+					"type": "string",
+					"minLength": 1
+				},
+				"surfaces": {
+					"minItems": 1,
+					"type": "array",
+					"items": {
+						"type": "string",
+						"minLength": 1
+					}
+				},
+				"platforms": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"minLength": 1
+					}
+				},
+				"usageGrants": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string"
+					},
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"quantity": {
+								"type": "number",
+								"exclusiveMinimum": 0
+							}
+						},
+						"required": [
+							"quantity"
+						],
+						"additionalProperties": false
+					}
+				},
+				"maxDevices": {
+					"type": "integer",
+					"exclusiveMinimum": 0,
+					"maximum": 9007199254740991
+				}
+			},
+			"required": [
+				"surfaces"
+			],
+			"additionalProperties": {}
+		},
+		"plan": {
+			"type": "object",
+			"properties": {
+				"description": {
+					"type": "string"
+				},
+				"trialDays": {
+					"type": "integer",
+					"minimum": 0,
+					"maximum": 9007199254740991
+				},
+				"isActive": {
+					"type": "boolean"
+				},
+				"offeringCodes": {
+					"minItems": 1,
+					"type": "array",
+					"items": {
+						"type": "string",
+						"minLength": 1
+					}
+				},
+				"pricings": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string",
+						"minLength": 1
+					},
+					"additionalProperties": {
+						"$ref": "#/$defs/pricing"
+					}
+				}
+			},
+			"required": [
+				"offeringCodes",
+				"pricings"
+			],
+			"additionalProperties": false
+		},
+		"pricing": {
+			"type": "object",
+			"properties": {
+				"currency": {
+					"type": "string",
+					"minLength": 3,
+					"maxLength": 3
+				},
+				"basePrice": {
+					"type": "number",
+					"minimum": 0
+				},
+				"isActive": {
+					"type": "boolean"
+				}
+			},
+			"required": [
+				"currency",
+				"basePrice"
+			],
+			"additionalProperties": false
+		}
+	}
+}

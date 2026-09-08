@@ -1,0 +1,101 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://2key.local/billing/auth.schema.json",
+	"type": "object",
+	"properties": {
+		"$schema": {
+			"type": "string"
+		},
+		"schemaVersion": {
+			"type": "number",
+			"const": 1
+		},
+		"users": {
+			"type": "object",
+			"propertyNames": {
+				"type": "string",
+				"minLength": 1
+			},
+			"additionalProperties": {
+				"$ref": "#/$defs/user"
+			}
+		},
+		"organizations": {
+			"type": "object",
+			"propertyNames": {
+				"type": "string",
+				"minLength": 1
+			},
+			"additionalProperties": {
+				"$ref": "#/$defs/organization"
+			}
+		}
+	},
+	"required": [
+		"schemaVersion"
+	],
+	"additionalProperties": false,
+	"title": "Optional auth.json bootstrap",
+	"description": "Generated from src/validators/catalog-seed.validator.ts. Do not edit by hand.",
+	"$defs": {
+		"user": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"emailVerified": {
+					"type": "boolean"
+				}
+			},
+			"additionalProperties": false
+		},
+		"organization": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string",
+					"minLength": 1
+				},
+				"members": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string",
+						"minLength": 1
+					},
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"role": {
+								"type": "string",
+								"minLength": 1
+							}
+						},
+						"required": [
+							"role"
+						],
+						"additionalProperties": false
+					}
+				},
+				"payingParty": {
+					"type": "object",
+					"properties": {
+						"billingEmail": {
+							"type": "string",
+							"format": "email",
+							"pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+						}
+					},
+					"required": [
+						"billingEmail"
+					],
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"name"
+			],
+			"additionalProperties": false
+		}
+	}
+}

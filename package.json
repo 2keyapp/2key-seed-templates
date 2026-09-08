@@ -1,0 +1,16 @@
+{
+	"name": "billing-seed-template",
+	"private": true,
+	"type": "module",
+	"description": "Merchant catalog.json / auth.json seed data. Structural validate with AJV; semantic apply stays in billing.",
+	"scripts": {
+		"validate": "node scripts/validate-catalog.mjs"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"devDependencies": {
+		"ajv": "^8.20.0",
+		"ajv-formats": "^3.0.1"
+	}
+}
