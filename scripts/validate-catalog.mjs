@@ -47,11 +47,11 @@ addFormats(ajv);
 const catalogValidate = ajv.compile(loadJson("schemas/catalog.schema.json"));
 const authValidate = ajv.compile(loadJson("schemas/auth.schema.json"));
 
-const catalogFiles = ["catalog.json", "examples/secmail/catalog.json"];
+const catalogFiles = ["catalog.json", "examples/sample-shop/catalog.json"];
 const authFiles = [
 	"auth.json",
 	"examples/auth/auth.json",
-	"examples/secmail/auth.json",
+	"examples/sample-shop/auth.json",
 ];
 
 let failed = false;
