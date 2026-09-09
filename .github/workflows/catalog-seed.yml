@@ -16,10 +16,17 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run validate
+      - name: hosts.json must match catalog.json
+        run: |
+          if [ -n "$(git status --porcelain -- hosts.json)" ]; then
+            echo "hosts.json is stale or untracked; run npm run validate and commit hosts.json"
+            git status --porcelain -- hosts.json
+            exit 1
+          fi
 
   dispatch:
     needs: validate
-    if: github.event_name == 'push' && github.repository != '2key/billing-seed-template'
+    if: github.event_name == 'push' && github.repository != '2keyapp/2key-seed-templates'
     runs-on: ubuntu-latest
     steps:
       - name: Dispatch catalog-seed-updated

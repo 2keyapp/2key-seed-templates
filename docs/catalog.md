@@ -1,16 +1,17 @@
-# Filling `catalog.json`
+# `catalog.json`
 
-`catalog.json` is the commercial source of truth for this billing VM. Billing assigns Postgres ids at apply time. Do not put `id` fields in this file.
+Day-to-day changes (price, description, hide a SKU): **[recipes.md](recipes.md)**. This page is the field list.
 
-Keep `"$schema": "./schemas/catalog.schema.json"` at the top so the editor uses the checked-in schema.
+Do not put database ids in this file. We assign those when we apply the catalog to your billing.
 
-## Skeleton
+Keep `"$schema": "./schemas/catalog.schema.json"` at the top.
+
+## Example shape
 
 ```json
 {
   "$schema": "./schemas/catalog.schema.json",
   "schemaVersion": 1,
-  "billingEngineTag": "optional-pin-to-a-billing-release",
   "surfaces": ["web", "desktop"],
   "platforms": ["linux"],
   "hosts": {
@@ -51,83 +52,56 @@ Keep `"$schema": "./schemas/catalog.schema.json"` at the top so the editor uses 
 }
 ```
 
-Surface strings (`web`, `desktop`) and host keys (`web`, `desktop`) are **yours**. Billing does not ship `secmail` / `office` / `secmailDesktop`. The SecMail example exists only under `examples/secmail/`.
+You choose the words (`web`, `desktop`, host names, product names). Empty `"products": {}` is valid **only on the blank template**. A tenant fork must be filled before we apply.
 
-## Top-level fields
+## What each part is
 
-| Field | Required | Meaning |
-|-------|----------|---------|
-| `schemaVersion` | Yes | JSON contract version. Currently `1`. Not a Postgres version. |
-| `billingEngineTag` | No | Pin to the billing release whose schema you copied. |
-| `surfaces` | If offerings/hosts use surfaces | Vocabulary for `resources.surfaces` and host `surfaces`. |
-| `platforms` | If any offering or host uses platforms | Vocabulary for `resources.platforms` and `excludePlatforms`. |
-| `hosts` | Recommended | Named using-party binaries and how they match offerings. |
-| `products` | Yes | Map of product name → body. Empty `{}` is valid JSON, empty shop. |
+| You fill | Meaning |
+|----------|---------|
+| `surfaces` | Labels for “which kind of app” (email vs office, web vs desktop, …). List them here before you use them on a SKU. |
+| `platforms` | Extra OS labels (today: `linux` if you have a Linux-only SKU). |
+| `hosts` | Your apps. Each host lists which `surfaces` it sells. Optional `excludePlatforms` hides Linux-only SKUs from a desktop host. |
+| `products` | What customers buy under. Empty `{}` is the blank template, not a live shop. |
+| `offerings` | Add-ons / entitlements (codes your apps check). |
+| `plans` | Priced bundles. `offeringCodes` must be offering keys **on that product**. |
+| `pricings` | `annual` / `monthly` / … → `{ "currency": "USD", "basePrice": 10 }`. One currency per interval in this version. |
 
-## Maps (object key = unique name)
+Optional `billingEngineTag` is a note for us (which catalog format this file was written against). `schemaVersion` is `1` for this format.
 
-| Path | Key | Body |
-|------|-----|------|
-| `hosts` | Host name you choose | `{ "surfaces": [...], "excludePlatforms": [...] }` |
-| `products` | Product name (shop / JWT identity) | description, isActive, meters, offerings, plans |
-| `products.*.meters` | Meter key | displayName, unit, aggregation (`sum` \| `max` \| `last`) |
-| `products.*.offerings` | Offering code | displayName, isActive, resources |
-| `products.*.plans` | Plan name | description, trialDays, isActive, offeringCodes, pricings |
-| `products.*.plans.*.pricings` | Interval (`annual`, `monthly`, `quarterly`, …) | `{ "currency", "basePrice", "isActive?" }` |
-
-This version allows **one currency per interval** (for example `pricings.annual.currency` is `"USD"`). Multi-currency on the same interval is not in schema v1.
-
-`currency` must exist in the billing database’s shared seed (USD, EUR, …). AJV does not know your DB; `billing-seed` does.
-
-## Offerings and resources
+## Add-on details (`resources`)
 
 | Field | Meaning |
 |-------|---------|
-| `resources.surfaces` | Which using-party surfaces this SKU belongs to (must be in catalog `surfaces`). |
-| `resources.platforms` | Optional extra scope (must be in catalog `platforms`). |
-| `resources.addonCode` | Code hosts use to gate the add-on. Defaults to the offering key if omitted. |
-| `resources.maxDevices` | Optional device cap. |
-| `resources.usageGrants` | Optional `{ "<meterKey>": { "quantity": n } }`. |
+| `surfaces` | Which of your surfaces this add-on belongs to. |
+| `platforms` | Optional OS scope. |
+| `addonCode` | Code the app uses to gate the feature. Defaults to the offering key. |
+| `maxDevices` | Optional device cap. |
+| `usageGrants` | Optional prepaid usage, e.g. `{ "my.meter": { "quantity": 1000 } }`. |
 
-Every string in a plan’s `offeringCodes` must be a key on **that product’s** `offerings`. AJV will not catch a typo here; billing-seed will.
+`npm run validate` checks the file shape. It will not catch a plan pointing at a missing offering, or a currency we have not enabled — we catch those when we apply.
 
-## Hosts (derived catalog, not a second price list)
+## Hosts and `hosts.json`
 
-You name hosts. You do **not** list offering codes by hand. After apply, billing writes a slice:
+You name hosts. You do **not** list offering codes by hand.
 
-```json
-{
-  "productNames": ["ExampleProduct"],
-  "hosts": {
-    "web": { "offeringCodes": ["basic"], "addonCodes": ["basic"] }
-  }
-}
-```
+`npm run validate` writes `hosts.json` (product names + offering/addon codes, **no prices**). Commit it. Your apps should use that file. Do not edit it by hand.
 
-An offering is included on a host when:
+A SKU appears on a host when:
 
-1. It shares at least one surface with `hosts.<name>.surfaces`, and
-2. It is **not** limited to `excludePlatforms` (every offering platform is in that exclude list — typical for “Linux-only SKU, skip the desktop host”).
-
-Derived output has **no prices** and **no Postgres ids**. Apps bake names and codes only.
-
-Worked Scomm hosts: `examples/secmail/catalog.json` (`secmailDesktop` excludes `linux`, `office` excludes `linux`, `secmailLinux` does not).
+1. It shares a surface with that host, and
+2. It is not limited to platforms the host excludes (typical: Linux-only SKU skipped on desktop).
 
 ## Changing a live catalog
 
-| Intent | What to do |
-|--------|------------|
-| New SKU | Add a new object key. Re-apply upserts. |
-| Rename display text | Change `displayName` / `description`. The **key** is the stable identity. |
-| Stop selling | `"isActive": false` on the offering or plan. |
-| Change price | Edit `basePrice`. Existing subscriptions are a billing concern, not a JSON delete. |
-| Remove a SKU that still has seats | **Do not omit the key.** Apply will fail closed. |
+Day-to-day: [recipes.md](recipes.md). Summary:
 
-Renaming a **key** (`"pgp"` → `"openpgp"`) is a new SKU plus an old one. Treat it as a migration, not a rename.
+| You want to | Do this |
+|-------------|---------|
+| Change price or copy | Edit `basePrice` / `description` / `displayName`. Leave the **key** alone. |
+| Stop selling | `"isActive": false`. |
+| New add-on or app | You add the keys (billing contact helps). Validate and commit `hosts.json`. PR. |
+| Remove a SKU people still pay for | **Do not delete the key.** Hide it instead. |
 
-## `schemaVersion` vs `billingEngineTag`
+Renaming a **key** is a new SKU, not a rename. Add a new key; hide the old one.
 
-- `schemaVersion` — this JSON shape (`1`).
-- `billingEngineTag` — optional string you set when you copy a new `schemas/` from billing so ops knows which engine the file was written for.
-
-When billing publishes a new contract, someone with both repos runs `npm run catalog-seed:schema` in billing (copies into `schemas/` if this repo is a sibling), then you pull/rebase the template and re-validate.
+When the catalog **format** changes, we update `schemas/` in this repo. Pull that; do not edit schema files yourself.
