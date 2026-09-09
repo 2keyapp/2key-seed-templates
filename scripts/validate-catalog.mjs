@@ -1,15 +1,17 @@
 #!/usr/bin/env node
 /**
- * Structural JSON Schema check for catalog.json / auth.json.
+ * Structural JSON Schema check for catalog.json / auth.json, then write hosts.json.
  * Semantic rules (offeringCodes, currencies, live SKUs) run in billing-seed.
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
+import { deriveHostCatalog } from "./derive-hosts.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
+const HOSTS_PATH = "hosts.json";
 
 /**
  * @param {string} relativePath
@@ -41,6 +43,20 @@ function checkFile(validate, relativePath) {
 	return false;
 }
 
+function writeHostsJson() {
+	const catalog = loadJson("catalog.json");
+	if (catalog == null || typeof catalog !== "object") {
+		process.stderr.write("catalog.json is not an object\n");
+		return false;
+	}
+	const slice = deriveHostCatalog(
+		/** @type {Record<string, unknown>} */ (catalog),
+	);
+	writeFileSync(resolve(ROOT, HOSTS_PATH), `${JSON.stringify(slice, null, "\t")}\n`);
+	process.stdout.write(`${HOSTS_PATH} written\n`);
+	return true;
+}
+
 const ajv = new Ajv2020({ allErrors: true });
 addFormats(ajv);
 
@@ -64,6 +80,10 @@ for (const file of authFiles) {
 	if (!checkFile(authValidate, file)) {
 		failed = true;
 	}
+}
+
+if (!failed && !writeHostsJson()) {
+	failed = true;
 }
 
 if (failed) {
