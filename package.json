@@ -2,7 +2,7 @@
 	"name": "billing-seed-template",
 	"private": true,
 	"type": "module",
-	"description": "Merchant catalog.json / auth.json seed data. Structural validate with AJV; semantic apply stays in billing.",
+	"description": "Your shop catalog (JSON). Run npm run validate before a PR. We apply it to billing — you do not need the billing engine.",
 	"scripts": {
 		"validate": "node scripts/validate-catalog.mjs"
 	},

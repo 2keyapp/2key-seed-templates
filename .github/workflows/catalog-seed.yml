@@ -26,7 +26,7 @@ jobs:
 
   dispatch:
     needs: validate
-    if: github.event_name == 'push' && github.repository != '2key/billing-seed-template'
+    if: github.event_name == 'push' && github.repository != '2keyapp/2key-seed-templates'
     runs-on: ubuntu-latest
     steps:
       - name: Dispatch catalog-seed-updated
