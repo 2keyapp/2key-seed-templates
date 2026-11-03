@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * Structural JSON Schema check for catalog.json / auth.json, then write hosts.json.
+ * Structural JSON Schema check for catalog.json / auth.json / storefront.json,
+ * then write hosts.json.
  * Semantic rules (offeringCodes, currencies, live SKUs) run in billing-seed.
  */
 
@@ -62,6 +63,9 @@ addFormats(ajv);
 
 const catalogValidate = ajv.compile(loadJson("schemas/catalog.schema.json"));
 const authValidate = ajv.compile(loadJson("schemas/auth.schema.json"));
+const storefrontValidate = ajv.compile(
+	loadJson("schemas/storefront.schema.json"),
+);
 
 const catalogFiles = [
 	"catalog.json",
@@ -83,6 +87,12 @@ for (const file of catalogFiles) {
 }
 for (const file of authFiles) {
 	if (!checkFile(authValidate, file)) {
+		failed = true;
+	}
+}
+// Optional: billing-page wording. Absent means the portal uses neutral text.
+for (const file of ["storefront.json", "examples/sample-shop/storefront.json"]) {
+	if (existsSync(resolve(ROOT, file)) && !checkFile(storefrontValidate, file)) {
 		failed = true;
 	}
 }

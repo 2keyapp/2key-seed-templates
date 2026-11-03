@@ -1,0 +1,334 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://2key.local/billing/storefront.schema.json",
+	"type": "object",
+	"properties": {
+		"$schema": {
+			"type": "string"
+		},
+		"schemaVersion": {
+			"type": "number",
+			"const": 1
+		},
+		"brand": {
+			"$ref": "#/$defs/brand"
+		},
+		"app": {
+			"$ref": "#/$defs/app"
+		},
+		"shop": {
+			"$ref": "#/$defs/shop"
+		},
+		"charge": {
+			"$ref": "#/$defs/charge"
+		},
+		"support": {
+			"$ref": "#/$defs/support"
+		},
+		"legal": {
+			"$ref": "#/$defs/legal"
+		},
+		"pages": {
+			"type": "object",
+			"propertyNames": {
+				"type": "string",
+				"pattern": "^[a-z0-9][a-z0-9-]{0,40}$"
+			},
+			"additionalProperties": {
+				"$ref": "#/$defs/page"
+			}
+		}
+	},
+	"required": [
+		"schemaVersion",
+		"brand",
+		"app",
+		"charge",
+		"legal"
+	],
+	"additionalProperties": false,
+	"$defs": {
+		"brand": {
+			"type": "object",
+			"properties": {
+				"displayName": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 80
+				},
+				"tagline": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 160
+				},
+				"logoUrl": {
+					"type": "string",
+					"maxLength": 500
+				},
+				"faviconUrl": {
+					"type": "string",
+					"maxLength": 500
+				},
+				"colors": {
+					"type": "object",
+					"propertyNames": {
+						"type": "string",
+						"pattern": "^[a-z][a-z0-9-]{0,40}$"
+					},
+					"additionalProperties": {
+						"type": "string",
+						"pattern": "^#[0-9a-fA-F]{3,8}$"
+					}
+				}
+			},
+			"required": [
+				"displayName"
+			],
+			"additionalProperties": false
+		},
+		"app": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 60
+				},
+				"billingScreen": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 120
+				},
+				"openPortalAction": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 60
+				},
+				"licensedPlatforms": {
+					"minItems": 1,
+					"type": "array",
+					"items": {
+						"type": "string",
+						"enum": [
+							"desktop",
+							"web",
+							"ios",
+							"android"
+						]
+					}
+				}
+			},
+			"required": [
+				"name",
+				"billingScreen",
+				"openPortalAction"
+			],
+			"additionalProperties": false
+		},
+		"shop": {
+			"type": "object",
+			"properties": {
+				"intro": {
+					"type": "object",
+					"properties": {
+						"personal": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 300
+						},
+						"orgAdmin": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 300
+						},
+						"orgMember": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 300
+						}
+					},
+					"additionalProperties": false
+				},
+				"featuredPlan": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 120
+				}
+			},
+			"additionalProperties": false
+		},
+		"charge": {
+			"type": "object",
+			"properties": {
+				"statementDescriptor": {
+					"type": "string",
+					"minLength": 5,
+					"maxLength": 22,
+					"pattern": "^[^<>\\\\'\"*]+$"
+				},
+				"whatWeSell": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 400
+				},
+				"reasons": {
+					"maxItems": 8,
+					"type": "array",
+					"items": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 200
+					}
+				}
+			},
+			"required": [
+				"statementDescriptor",
+				"whatWeSell"
+			],
+			"additionalProperties": false
+		},
+		"support": {
+			"type": "object",
+			"properties": {
+				"email": {
+					"type": "string",
+					"format": "email",
+					"pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+				},
+				"docsUrl": {
+					"type": "string",
+					"format": "uri"
+				},
+				"replyWithin": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 40
+				},
+				"urgentReplyWithin": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 40
+				}
+			},
+			"additionalProperties": false
+		},
+		"legal": {
+			"type": "object",
+			"properties": {
+				"legalName": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 160
+				},
+				"address": {
+					"type": "object",
+					"properties": {
+						"line1": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 120
+						},
+						"line2": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 120
+						},
+						"city": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 80
+						},
+						"region": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 80
+						},
+						"postalCode": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 20
+						},
+						"country": {
+							"type": "string",
+							"pattern": "^[A-Z]{2}$"
+						}
+					},
+					"required": [
+						"line1",
+						"city",
+						"country"
+					],
+					"additionalProperties": false
+				},
+				"termsUrl": {
+					"type": "string",
+					"format": "uri"
+				},
+				"privacyUrl": {
+					"type": "string",
+					"format": "uri"
+				},
+				"taxRegistrations": {
+					"type": "array",
+					"items": {
+						"$ref": "#/$defs/taxRegistration"
+					}
+				}
+			},
+			"required": [
+				"legalName"
+			],
+			"additionalProperties": false
+		},
+		"taxRegistration": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string",
+					"enum": [
+						"gst_hst",
+						"qst",
+						"pst",
+						"vat",
+						"sales_tax"
+					]
+				},
+				"jurisdiction": {
+					"type": "string",
+					"pattern": "^[A-Z]{2}(-[A-Z0-9]{1,3})?$"
+				},
+				"number": {
+					"type": "string",
+					"minLength": 3,
+					"maxLength": 40
+				}
+			},
+			"required": [
+				"type",
+				"jurisdiction",
+				"number"
+			],
+			"additionalProperties": false
+		},
+		"page": {
+			"type": "object",
+			"properties": {
+				"title": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 120
+				},
+				"markdown": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 20000
+				}
+			},
+			"required": [
+				"title",
+				"markdown"
+			],
+			"additionalProperties": false
+		}
+	}
+}

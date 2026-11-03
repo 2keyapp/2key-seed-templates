@@ -1,0 +1,29 @@
+{
+	"$schema": "../../schemas/storefront.schema.json",
+	"schemaVersion": 1,
+	"brand": {
+		"displayName": "Sample Shop"
+	},
+	"app": {
+		"name": "the Sample app",
+		"billingScreen": "Settings → Billing",
+		"openPortalAction": "Open Billing Portal"
+	},
+	"charge": {
+		"statementDescriptor": "SAMPLESHOP",
+		"whatWeSell": "Sample Shop sells add-ons for the Sample app."
+	},
+	"support": {
+		"email": "support@example.com",
+		"replyWithin": "2 business days"
+	},
+	"legal": {
+		"legalName": "Sample Shop Ltd."
+	},
+	"pages": {
+		"about": {
+			"title": "About Sample Shop",
+			"markdown": "# Who we are\n\nSample Shop makes the Sample app.\n\n- Plain text and **bold**\n- Links like [our site](https://example.com)"
+		}
+	}
+}

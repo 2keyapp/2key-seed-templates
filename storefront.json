@@ -1,0 +1,47 @@
+{
+	"$schema": "./schemas/storefront.schema.json",
+	"schemaVersion": 1,
+	"brand": {
+		"displayName": "scomm.ai",
+		"logoUrl": "/scomm-logo.png"
+	},
+	"app": {
+		"name": "the Scomm app",
+		"billingScreen": "Settings → Billing",
+		"openPortalAction": "Open Billing Portal",
+		"licensedPlatforms": ["desktop"]
+	},
+	"shop": {
+		"intro": {
+			"personal": "Buy add-ons for yourself. They are ready to use on your devices right after payment.",
+			"orgAdmin": "Buy seats for your organization, then assign them to members.",
+			"orgMember": "Browse plans for this organization. Assigned add-ons are marked below."
+		}
+	},
+	"charge": {
+		"statementDescriptor": "SCOMM.AI",
+		"whatWeSell": "Scomm.AI sells add-ons for the Scomm email app, such as Scomm Desktop and Post-Quantum E2EE. Payments are processed by Stripe.",
+		"reasons": [
+			"A yearly renewal of an add-on you, or someone in your household, bought earlier.",
+			"Your employer or a colleague bought seats for a team with a company card.",
+			"A family member bought an add-on with your card."
+		]
+	},
+	"support": {
+		"email": "support@scomm.ai",
+		"replyWithin": "2 business days",
+		"urgentReplyWithin": "1 business day"
+	},
+	"legal": {
+		"legalName": "Media Routes Inc.",
+		"address": {
+			"line1": "86-50 Burnhamthorpe Road W",
+			"city": "Mississauga",
+			"region": "ON",
+			"postalCode": "L5B 3C2",
+			"country": "CA"
+		},
+		"termsUrl": "https://public.scomm.ai/ToS.html",
+		"privacyUrl": "https://public.scomm.ai/privacy.html"
+	}
+}
