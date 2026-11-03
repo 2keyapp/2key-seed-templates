@@ -28,6 +28,9 @@
 		"legal": {
 			"$ref": "#/$defs/legal"
 		},
+		"billing": {
+			"$ref": "#/$defs/billing"
+		},
 		"pages": {
 			"type": "object",
 			"propertyNames": {
@@ -308,6 +311,19 @@
 				"jurisdiction",
 				"number"
 			],
+			"additionalProperties": false
+		},
+		"billing": {
+			"type": "object",
+			"properties": {
+				"renewalDates": {
+					"type": "string",
+					"enum": [
+						"account",
+						"seat"
+					]
+				}
+			},
 			"additionalProperties": false
 		},
 		"page": {
