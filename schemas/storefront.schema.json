@@ -13,6 +13,9 @@
 		"brand": {
 			"$ref": "#/$defs/brand"
 		},
+		"theme": {
+			"$ref": "#/$defs/theme"
+		},
 		"app": {
 			"$ref": "#/$defs/app"
 		},
@@ -71,23 +74,103 @@
 				"faviconUrl": {
 					"type": "string",
 					"maxLength": 500
-				},
-				"colors": {
-					"type": "object",
-					"propertyNames": {
-						"type": "string",
-						"pattern": "^[a-z][a-z0-9-]{0,40}$"
-					},
-					"additionalProperties": {
-						"type": "string",
-						"pattern": "^#[0-9a-fA-F]{3,8}$"
-					}
 				}
 			},
 			"required": [
 				"displayName"
 			],
 			"additionalProperties": false
+		},
+		"theme": {
+			"type": "object",
+			"properties": {
+				"appearance": {
+					"type": "string",
+					"enum": [
+						"light",
+						"dark",
+						"system"
+					]
+				},
+				"colors": {
+					"type": "object",
+					"properties": {
+						"light": {
+							"$ref": "#/$defs/themePalette"
+						},
+						"dark": {
+							"$ref": "#/$defs/themePalette"
+						}
+					},
+					"additionalProperties": false
+				},
+				"radius": {
+					"type": "number",
+					"minimum": 0,
+					"maximum": 1.5
+				},
+				"fonts": {
+					"type": "object",
+					"properties": {
+						"body": {
+							"type": "string",
+							"pattern": "^[A-Za-z0-9][A-Za-z0-9 ]{0,39}$"
+						},
+						"heading": {
+							"type": "string",
+							"pattern": "^[A-Za-z0-9][A-Za-z0-9 ]{0,39}$"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"themePalette": {
+			"type": "object",
+			"propertyNames": {
+				"type": "string",
+				"enum": [
+					"background",
+					"foreground",
+					"card",
+					"card-foreground",
+					"popover",
+					"popover-foreground",
+					"primary",
+					"primary-foreground",
+					"secondary",
+					"secondary-foreground",
+					"muted",
+					"muted-foreground",
+					"accent",
+					"accent-foreground",
+					"destructive",
+					"border",
+					"input",
+					"ring",
+					"chart-1",
+					"chart-2",
+					"chart-3",
+					"chart-4",
+					"chart-5",
+					"sidebar",
+					"sidebar-foreground",
+					"sidebar-primary",
+					"sidebar-primary-foreground",
+					"sidebar-accent",
+					"sidebar-accent-foreground",
+					"sidebar-border",
+					"sidebar-ring",
+					"backdrop-from",
+					"backdrop-to",
+					"backdrop-foreground"
+				]
+			},
+			"additionalProperties": {
+				"type": "string",
+				"pattern": "^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
+			}
 		},
 		"app": {
 			"type": "object",

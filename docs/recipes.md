@@ -41,6 +41,17 @@ Change `10` to the new amount. Keep `"USD"`.
 
 Do not change the quoted **key**.
 
+## Change the portal's look
+
+`theme` in [`storefront.json`](../storefront.json) sets the billing portal's colours, fonts and corners:
+
+- `colors.light` / `colors.dark` — `#rrggbb` per token. `primary` is buttons and links, `sidebar*` the left menu, `backdrop-from` / `backdrop-to` the sign-in page gradient and `backdrop-foreground` the text on it. Tokens you leave out keep the portal default. The full list is in `schemas/storefront.schema.json` (`themePalette`).
+- `fonts.body` / `fonts.heading` — a [Google Fonts](https://fonts.google.com) family name, e.g. `"Inter"`.
+- `radius` — corner rounding in rem, `0` (square) to `1.5`.
+- `appearance` — `"light"`, `"dark"` or `"system"`: what viewers see until they pick with the portal's sun/moon button.
+
+`npm run validate`, then open a PR. Customers see it after the next apply.
+
 ## Stop selling
 
 On the plan (or offering) set `"isActive": false`. Do **not** delete the key. If anyone still subscribes, apply will fail.
