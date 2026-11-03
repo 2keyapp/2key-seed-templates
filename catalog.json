@@ -204,6 +204,7 @@
 							"basePrice": 15
 						}
 					},
+					"comingSoon": true,
 					"isActive": false
 				},
 				"Driving-Mode": {

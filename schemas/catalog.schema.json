@@ -267,6 +267,9 @@
 				"isActive": {
 					"type": "boolean"
 				},
+				"comingSoon": {
+					"type": "boolean"
+				},
 				"offeringCodes": {
 					"minItems": 1,
 					"type": "array",
