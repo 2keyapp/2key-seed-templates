@@ -306,6 +306,11 @@
 					"minLength": 1,
 					"maxLength": 160
 				},
+				"entityDescription": {
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 160
+				},
 				"address": {
 					"type": "object",
 					"properties": {

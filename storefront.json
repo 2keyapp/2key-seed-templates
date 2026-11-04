@@ -113,6 +113,7 @@
 	},
 	"legal": {
 		"legalName": "Media Routes Inc.",
+		"entityDescription": "An Ontario corporation",
 		"address": {
 			"line1": "86-50 Burnhamthorpe Road W",
 			"city": "Mississauga",
