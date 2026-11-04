@@ -2,7 +2,7 @@
 	"$schema": "./schemas/storefront.schema.json",
 	"schemaVersion": 1,
 	"brand": {
-		"displayName": "scomm.ai",
+		"displayName": "Scomm.AI",
 		"logoUrl": "/scomm-logo.png"
 	},
 	"theme": {
