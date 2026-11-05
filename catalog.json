@@ -84,19 +84,6 @@
 						]
 					}
 				},
-				"driving_mode": {
-					"displayName": "Driving-Mode",
-					"resources": {
-						"addonCode": "driving_mode",
-						"surfaces": [
-							"scomm"
-						],
-						"maxDevices": 3,
-						"requiresOfferings": [
-							"desktop"
-						]
-					}
-				},
 				"linux": {
 					"displayName": "Scomm Linux",
 					"resources": {
@@ -205,20 +192,6 @@
 						}
 					},
 					"comingSoon": true,
-					"isActive": false
-				},
-				"Driving-Mode": {
-					"description": "Hands-free mail while driving.",
-					"trialDays": 30,
-					"offeringCodes": [
-						"driving_mode"
-					],
-					"pricings": {
-						"annual": {
-							"currency": "USD",
-							"basePrice": 15
-						}
-					},
 					"isActive": false
 				},
 				"Scomm Linux": {
