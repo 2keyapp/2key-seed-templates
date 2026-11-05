@@ -122,7 +122,14 @@
 			"country": "CA"
 		},
 		"termsUrl": "https://public.scomm.ai/ToS.html",
-		"privacyUrl": "https://public.scomm.ai/privacy.html"
+		"privacyUrl": "https://public.scomm.ai/privacy.html",
+		"taxRegistrations": [
+			{
+				"type": "gst_hst",
+				"jurisdiction": "CA",
+				"number": "83919 9528 RT0001"
+			}
+		]
 	},
 	"billing": {
 		"renewalDates": "seat"
