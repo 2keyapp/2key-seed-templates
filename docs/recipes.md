@@ -14,7 +14,7 @@ Shop card **titles** are the plan keys below. Search the file for the quoted nam
 | Custom Colours & Backgrounds | `accent_color` | US$5 |
 | Basic Bundle | `desktop`, `ai_assistant`, `pqc`, `accent_color` | US$25 |
 
-Hidden (`"isActive": false`, kept for existing subscriptions): Scomm Linux / Linux Version (`linux`, counts as `desktop` on older licenses), Local-AI, Outlook OpenPGP ECC (`pgp`), Outlook OpenPGP ECC+PQC, All Add-ons Bundle, and the preview plans Campaign-Manager and Driving-Mode.
+Hidden (`"isActive": false`, kept for existing subscriptions): Scomm Linux / Linux Version (`linux`, counts as `desktop` on older licenses), Local-AI, Outlook OpenPGP ECC (`pgp`), Outlook OpenPGP ECC+PQC, All Add-ons Bundle, and the preview plan Campaign-Manager.
 
 Product key: `"Scomm"`. App: `scommDesktop` (Windows, macOS, Linux). Mobile builds are not licensed. Surface: `scomm` (`office` stays declared for the retired Outlook offering only). Every offering covers up to 3 devices (`maxDevices: 3`). Trial is 30 days on every plan.
 
